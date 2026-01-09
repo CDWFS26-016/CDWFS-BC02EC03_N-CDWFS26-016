@@ -1,19 +1,22 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Événements{% endblock %}
+{% block title %}Relais et Châteaux{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Événements</h1>
+        <div>
+            <h1>🏰 Relais et Châteaux</h1>
+            <p class="text-muted mb-3">Réservez et commenter pour 580 établissements dans 65 pays</p>
+        </div>
         {% if is_granted('ROLE_RESPONSABLE') or is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('event_create') }}" class="btn btn-primary">+ Créer un événement</a>
+            <a href="{{ path('event_create') }}" class="btn btn-primary">+ Ajouter un établissement</a>
         {% endif %}
     </div>
 
     {% if events|length == 0 %}
         <div class="alert alert-info">
-            Aucun événement pour le moment.
+            Aucun établissement pour le moment.
         </div>
     {% else %}
         <div class="row">
