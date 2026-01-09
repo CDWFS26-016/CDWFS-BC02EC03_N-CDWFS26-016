@@ -38,7 +38,7 @@ class ReviewController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Les avis sont non validés par défaut
-            $review->setValidated(false);
+            $review->setIsValidated(false);
 
             $entityManager->persist($review);
             $entityManager->flush();
@@ -66,11 +66,19 @@ class ReviewController extends AbstractController
         $isResponsible = $event->getResponsable() === $this->getUser();
         $isAdmin = $this->isGranted('ROLE_ADMIN');
 
-        if (!($isOwner || $isResponsible || $isAdmin)) {
+        // Propriétaire peut éditer son avis
+        // Responsable peut modérer les avis de son événement
+        // Admin peut modérer tous les avis
+        if ($isOwner) {
+            // L'auteur ne peut que modifier son avis, pas le valider
+            $isModerating = false;
+        } elseif ($isResponsible || $isAdmin) {
+            // Responsable/Admin peuvent modérer
+            $isModerating = true;
+        } else {
             throw $this->createAccessDeniedException('Vous n\'avez pas le droit de modifier cet avis');
         }
 
-        $isModerating = $isResponsible || $isAdmin;
         $form = $this->createForm(ReviewFormType::class, $review, [
             'is_moderation' => $isModerating,
         ]);
@@ -79,14 +87,12 @@ class ReviewController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Si c'est une modération et le checkbox est coché, valider l'avis
             if ($isModerating && $form->has('validated') && $form->get('validated')->getData()) {
-                $review->setValidated(true);
+                $review->setIsValidated(true);
             }
 
             $entityManager->flush();
 
-            $message = $isOwner && !($isResponsible || $isAdmin)
-                ? 'Votre avis a été modifié'
-                : 'L\'avis a été modéré avec succès';
+            $message = $isOwner ? 'Votre avis a été modifié' : 'L\'avis a été modéré avec succès';
 
             $this->addFlash('success', $message);
             return $this->redirectToRoute('event_show', ['id' => $event->getId()]);
