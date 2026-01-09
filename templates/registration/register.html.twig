@@ -1,0 +1,60 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Créer un compte</h2>
+
+                    {{ form_start(registrationForm) }}
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.email) }}
+                            {{ form_widget(registrationForm.email) }}
+                            {% if registrationForm.email.vars.errors|length %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ form_errors(registrationForm.email) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.password.first) }}
+                            {{ form_widget(registrationForm.password.first) }}
+                            {% if registrationForm.password.first.vars.errors|length %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ form_errors(registrationForm.password.first) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form_label(registrationForm.password.second) }}
+                            {{ form_widget(registrationForm.password.second) }}
+                            {% if registrationForm.password.vars.errors|length %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ form_errors(registrationForm.password) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="w-100 btn btn-primary btn-lg">
+                            S'inscrire
+                        </button>
+                    {{ form_end(registrationForm) }}
+
+                    <div class="text-center mt-3">
+                        <p>
+                            Vous avez déjà un compte ?
+                            <a href="{{ path('login') }}">Se connecter</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

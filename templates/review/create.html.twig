@@ -1,0 +1,57 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Ajouter un avis{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1>Ajouter un avis pour "{{ event.title }}"</h1>
+
+            {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form.content) }}
+                    {{ form_widget(form.content) }}
+                    {% if form.content.vars.errors|length %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form_errors(form.content) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.rating) }}
+                    {{ form_widget(form.rating) }}
+                    {% if form.rating.vars.errors|length %}
+                        <div class="alert alert-danger mt-2">
+                            {{ form_errors(form.rating) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_RESPONSABLE') %}
+                    <div class="mb-3 p-3 bg-warning bg-opacity-10 border border-warning rounded">
+                        <h6 class="text-warning">🛠️ Zone Modérateur</h6>
+                        {{ form_label(form.comments) }}
+                        {{ form_widget(form.comments) }}
+                        {% if form.comments.vars.errors|length %}
+                            <div class="alert alert-danger mt-2">
+                                {{ form_errors(form.comments) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        ✓ Publier l'avis
+                    </button>
+                    <a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-secondary">
+                        Annuler
+                    </a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

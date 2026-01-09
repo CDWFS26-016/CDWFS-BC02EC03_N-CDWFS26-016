@@ -1,0 +1,51 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gestion des événements{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Gestion des événements</h2>
+
+    {% if events|length == 0 %}
+        <div class="alert alert-info">Aucun événement.</div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Date</th>
+                        <th>Responsable</th>
+                        <th>Avis</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.date|date('d/m/Y H:i') }}</td>
+                            <td>{{ event.responsable.email }}</td>
+                            <td>
+                                {% set unvalidated = event.reviews|filter(r => not r.isValidated())|length %}
+                                <span class="badge {% if unvalidated > 0 %}bg-warning{% else %}bg-success{% endif %}">
+                                    {{ unvalidated }} à modérer
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-sm btn-primary">
+                                    👁️ Voir
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary mt-3">
+        ← Retour
+    </a>
+</div>
+{% endblock %}

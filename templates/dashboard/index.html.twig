@@ -1,0 +1,87 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Mon tableau de bord{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Bienvenue, {{ user.email }} 👋</h1>
+
+    <div class="row mt-4">
+        <!-- Mes avis -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="m-0">Mes avis ({{ myReviews|length }})</h5>
+                </div>
+                <div class="card-body">
+                    {% if myReviews|length == 0 %}
+                        <p class="text-muted">Vous n'avez pas encore écrit d'avis.</p>
+                    {% else %}
+                        <ul class="list-group">
+                            {% for review in myReviews %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong>{{ review.event.title }}</strong>
+                                            <br>
+                                            <small class="text-muted">⭐ {{ review.rating }}/5</small>
+                                            <br>
+                                            <small class="badge {% if review.isValidated %}bg-success{% else %}bg-warning{% endif %}">
+                                                {% if review.isValidated %}✓ Validé{% else %}⏳ En attente{% endif %}
+                                            </small>
+                                        </div>
+                                        <a href="{{ path('review_edit', {'id': review.id}) }}" class="btn btn-sm btn-outline-primary">
+                                            ✏️
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Mes événements (si responsable) -->
+        {% if myEvents|length > 0 %}
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="m-0">Événements à modérer ({{ myEvents|length }})</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for event in myEvents %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong>{{ event.title }}</strong>
+                                            <br>
+                                            <small class="text-muted">📅 {{ event.date|date('d/m/Y') }}</small>
+                                            <br>
+                                            <small>
+                                                💬 
+                                                {% set unvalidated = event.reviews|filter(r => not r.isValidated)|length %}
+                                                {{ unvalidated }} avis à modérer
+                                            </small>
+                                        </div>
+                                        <a href="{{ path('event_show', {'id': event.id}) }}" class="btn btn-sm btn-outline-warning">
+                                            👁️
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ path('event_list') }}" class="btn btn-primary">
+            Voir tous les événements
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{{ path('home') }}">
+            ⭐ Events & Reviews
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto gap-2">
+                {# Événements - Uniquement si connecté #}
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('event_list') }}">📅 Événements</a>
+                    </li>
+                {% endif %}
+
+                {# Menu utilisateur #}
+                {% if app.user %}
+                    <li class="nav-item dropdown">
+                        <button class="nav-link btn btn-link dropdown-toggle d-flex align-items-center gap-2" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;">
+                            <i class="bi bi-person-circle">👤</i>
+                            <span>{{ app.user.email }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{{ path('dashboard') }}">📊 Mon tableau de bord</a></li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ path('admin') }}">🛠️ Administration</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ path('logout') }}">
+                                    <button type="submit" class="dropdown-item" style="border: none; background: none; cursor: pointer; text-align: left;">
+                                        🚪 Déconnexion
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    {# Liens publics si pas connecté #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('login') }}">🔐 Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-light" href="{{ path('app_register') }}">✍️ S'inscrire</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}

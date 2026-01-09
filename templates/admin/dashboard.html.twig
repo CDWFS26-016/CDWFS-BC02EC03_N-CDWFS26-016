@@ -1,0 +1,51 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Tableau de bord Admin{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>🛠️ Administration</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="card-title text-muted">Utilisateurs</h6>
+                    <h2 class="card-text">{{ users|length }}</h2>
+                    <a href="{{ path('admin_user_index') }}" class="btn btn-sm btn-primary mt-2">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="card-title text-muted">Événements</h6>
+                    <h2 class="card-text">{{ events|length }}</h2>
+                    <a href="{{ path('admin_event_index') }}" class="btn btn-sm btn-primary mt-2">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="card-title text-muted">Avis</h6>
+                    <h2 class="card-text">{{ reviews|length }}</h2>
+                    <a href="{{ path('admin_review_index') }}" class="btn btn-sm btn-primary mt-2">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card text-center border-warning">
+                <div class="card-body">
+                    <h6 class="card-title text-warning">⚠️ En attente</h6>
+                    <h2 class="card-text">{{ unvalidatedReviewsCount }}</h2>
+                    <a href="{{ path('admin_review_index') }}" class="btn btn-sm btn-warning mt-2">Modérer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

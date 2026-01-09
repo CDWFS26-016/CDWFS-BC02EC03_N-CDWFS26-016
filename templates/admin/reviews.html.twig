@@ -1,0 +1,80 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Modération des avis{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Modération des avis</h2>
+
+    {% if unvalidatedReviews|length > 0 %}
+        <div class="alert alert-warning">
+            ⚠️ {{ unvalidatedReviews|length }} avis en attente de modération
+        </div>
+
+        <h3 class="mt-4 mb-3">Avis à valider</h3>
+        <div class="row">
+            {% for review in unvalidatedReviews %}
+                <div class="col-md-6 mb-3">
+                    <div class="card border-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">⭐ {{ review.rating }}/5</h5>
+                            <p class="card-text">{{ review.content|slice(0, 100) }}{% if review.content|length > 100 %}...{% endif %}</p>
+                            <p class="card-text"><small class="text-muted">Par: {{ review.author.email }}</small></p>
+                            <p class="card-text"><small class="text-muted">Événement: {{ review.event.title }}</small></p>
+                            <a href="{{ path('review_edit', {'id': review.id}) }}" class="btn btn-sm btn-warning">
+                                ✏️ Modérer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-success">
+            ✓ Tous les avis sont modérés !
+        </div>
+    {% endif %}
+
+    <h3 class="mt-4">Tous les avis ({{ reviews|length }})</h3>
+    {% if reviews|length == 0 %}
+        <div class="alert alert-info">Aucun avis.</div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Auteur</th>
+                        <th>Événement</th>
+                        <th>Note</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for review in reviews %}
+                        <tr>
+                            <td>{{ review.author.email }}</td>
+                            <td>{{ review.event.title }}</td>
+                            <td>⭐ {{ review.rating }}/5</td>
+                            <td>
+                                <span class="badge {% if review.isValidated %}bg-success{% else %}bg-warning{% endif %}">
+                                    {% if review.isValidated %}✓ Validé{% else %}⏳ En attente{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ path('review_edit', {'id': review.id}) }}" class="btn btn-sm btn-primary">
+                                    ✏️
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary mt-3">
+        ← Retour
+    </a>
+</div>
+{% endblock %}

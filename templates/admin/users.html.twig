@@ -1,0 +1,65 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Gestion des utilisateurs</h2>
+
+    {% if users|length == 0 %}
+        <div class="alert alert-info">Aucun utilisateur.</div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Rôles</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <div>
+                                    {% for role in user.roles %}
+                                        <span class="badge bg-secondary">
+                                            {% if role == 'ROLE_ADMIN' %}
+                                                👑 {{ role }}
+                                            {% elseif role == 'ROLE_RESPONSABLE' %}
+                                                📋 {{ role }}
+                                            {% else %}
+                                                👤 {{ role }}
+                                            {% endif %}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>
+                                {% if user != app.user %}
+                                    <a href="{{ path('admin_edit_user', {'id': user.id}) }}" class="btn btn-sm btn-primary">
+                                        ✏️ Éditer
+                                    </a>
+                                    <form method="POST" action="{{ path('admin_delete_user', {'id': user.id}) }}" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr ?')">
+                                            🗑️ Supprimer
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="badge bg-info">Vous</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary mt-3">
+        ← Retour
+    </a>
+</div>
+{% endblock %}
