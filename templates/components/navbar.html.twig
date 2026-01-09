@@ -2,17 +2,18 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="{{ path('home') }}">
-            ⭐ Events & Reviews
+            <div>🏰 Relais et Châteaux</div>
+            <small style="font-size: 0.5rem; display: block; color: #ddd;">Réservez et commenter pour 580 établissements dans 65 pays</small>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto gap-2">
-                {# Événements - Uniquement si connecté #}
+                {# Établissements - Uniquement si connecté #}
                 {% if app.user %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('event_list') }}">📅 Événements</a>
+                        <a class="nav-link" href="{{ path('event_list') }}">🏰 Établissements</a>
                     </li>
                 {% endif %}
 

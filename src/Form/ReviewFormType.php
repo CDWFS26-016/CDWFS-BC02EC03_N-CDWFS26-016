@@ -36,27 +36,28 @@ class ReviewFormType extends AbstractType
                     'class' => 'form-select',
                 ]
             ])
-            ->add('comments', TextareaType::class, [
-                'label' => 'Commentaires de modération',
-                'required' => false,
-                'attr' => [
-                    'class' => 'form-control',
-                    'rows' => 3,
-                    'placeholder' => 'Réservé aux modérateurs'
-                ]
-            ])
         ;
 
-        // Ajouter le champ de validation uniquement si c'est une modération
+        // Ajouter les champs de modération uniquement si c'est une modération
         if ($options['is_moderation']) {
-            $builder->add('validated', CheckboxType::class, [
-                'label' => '✅ Valider cet avis',
-                'required' => false,
-                'mapped' => false,
-                'attr' => [
-                    'class' => 'form-check-input',
-                ]
-            ]);
+            $builder
+                ->add('comments', TextareaType::class, [
+                    'label' => 'Commentaires de modération',
+                    'required' => false,
+                    'attr' => [
+                        'class' => 'form-control',
+                        'rows' => 3,
+                        'placeholder' => 'Réservé aux modérateurs'
+                    ]
+                ])
+                ->add('validated', CheckboxType::class, [
+                    'label' => '✅ Valider cet avis',
+                    'required' => false,
+                    'mapped' => false,
+                    'attr' => [
+                        'class' => 'form-check-input',
+                    ]
+                ]);
         }
     }
 

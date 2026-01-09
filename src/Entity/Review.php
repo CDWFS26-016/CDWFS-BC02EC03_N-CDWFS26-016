@@ -73,7 +73,7 @@ class Review
         return $this->isValidated;
     }
 
-    public function setValidated(bool $isValidated): static
+    public function setIsValidated(bool $isValidated): static
     {
         $this->isValidated = $isValidated;
 
